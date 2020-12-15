@@ -1,9 +1,9 @@
 import React from 'react';
 import {createDrawerNavigator} from 'react-navigation-drawer';
-import {AppTabNavigator} from './AppTabNavigator';
+import AppTabNavigator from './AppTabNavigator';
 import CustomSideBarMenu from './CustomSideBarMenu';
 import SettingScreen from '../Screens/SettingScreen';
-import MyDonationsScreen from '../Screens/MyDonationsScreen';
+import MyDonationScreen from '../Screens/MyDonationScreen';
 import NotificationScreen from '../Screens/NotificationScreen';
 export const AppDrawerNavigator = createDrawerNavigator({
     Home:{screen:AppTabNavigator},
