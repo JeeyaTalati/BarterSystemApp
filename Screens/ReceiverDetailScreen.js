@@ -13,7 +13,7 @@ export default class RecieverDetailsScreen extends Component{
       userName        : "",
       recieverId      : this.props.navigation.getParam('details')["userId"],
       requestId       : this.props.navigation.getParam('details')["requestId"],
-      itemName        : this.props.navigation.getParam('details')["itemName"],
+      bookName        : this.props.navigation.getParam('details')["bookName"],
       reason     : this.props.navigation.getParam('details')["reason"],
       recieverName    : '',
       recieverContact : '',
@@ -36,7 +36,7 @@ export default class RecieverDetailsScreen extends Component{
       })
     });
 
-    db.collection('requested').where('request_id','==',this.state.requestId).get()
+    db.collection('requested_books').where('request_id','==',this.state.requestId).get()
     .then(snapshot=>{
       snapshot.forEach(doc => {
         this.setState({recieverRequestDocId:doc.id})
@@ -55,9 +55,9 @@ export default class RecieverDetailsScreen extends Component{
     })
   }
 
-  updateStatus=()=>{
+  updateBookStatus=()=>{
     db.collection('all_donations').add({
-      "item_name"           : this.state.itemName,
+      "book_name"           : this.state.bookName,
       "request_id"          : this.state.requestId,
       "requested_by"        : this.state.recieverName,
       "donor_id"            : this.state.userId,
@@ -67,12 +67,12 @@ export default class RecieverDetailsScreen extends Component{
 
 
   addNotification=()=>{
-    var message = this.state.userName + " has shown interest in donating the item"
+    var message = this.state.userName + " has shown interest in donating the book"
     db.collection("all_notifications").add({
       "targeted_user_id"    : this.state.recieverId,
       "donor_id"            : this.state.userId,
       "request_id"          : this.state.requestId,
-      "item_name"           : this.state.itemName,
+      "book_name"           : this.state.bookName,
       "date"                : firebase.firestore.FieldValue.serverTimestamp(),
       "notification_status" : "unread",
       "message"             : message
@@ -93,17 +93,17 @@ export default class RecieverDetailsScreen extends Component{
           <View style={{flex:0.1}}>
             <Header
               leftComponent ={<Icon name='arrow-left' type='feather' color='#696969'  onPress={() => this.props.navigation.goBack()}/>}
-              centerComponent={{ text:"Donate ", style: { color: '#90A5A9', fontSize:20,fontWeight:"bold", } }}
+              centerComponent={{ text:"Donate Books", style: { color: '#90A5A9', fontSize:20,fontWeight:"bold", } }}
               backgroundColor = "#eaf8fe"
             />
           </View>
           <View style={{flex:0.3}}>
             <Card
-                title={" Information"}
+                title={"Book Information"}
                 titleStyle= {{fontSize : 20}}
               >
               <Card >
-                <Text style={{fontWeight:'bold'}}>Name : {this.state.itemName}</Text>
+                <Text style={{fontWeight:'bold'}}>Name : {this.state.bookName}</Text>
               </Card>
               <Card>
                 <Text style={{fontWeight:'bold'}}>Reason : {this.state.reason_for_requesting}</Text>
@@ -133,7 +133,7 @@ export default class RecieverDetailsScreen extends Component{
                 <TouchableOpacity
                     style={styles.button}
                     onPress={()=>{
-                      this.updateStatus()
+                      this.updateBookStatus()
                       this.addNotification()
                       this.props.navigation.navigate('MyDonations')
                     }}>

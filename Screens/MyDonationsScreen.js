@@ -1,11 +1,11 @@
 import React ,{Component} from 'react'
 import {View, Text,TouchableOpacity,ScrollView,FlatList,StyleSheet} from 'react-native';
-import {Card,Icon,ListItem} from 'react-native-elements'
-import MyHeader from '../components/MyHeader.js'
+import {Card,Icon,ListItem} from 'react-native-elements';
+import MyHeader from '../Components/MyHeader.js';
 import firebase from 'firebase';
 import db from '../config.js'
 
-export default class MyDonationsScreen extends Component {
+export default class MyDonationScreen extends Component {
    constructor(){
      super()
      this.state = {
@@ -44,26 +44,26 @@ export default class MyDonationsScreen extends Component {
      })
    }
 
-   send=(details)=>{
-     if(details.request_status === " Sent"){
+   sendBook=(bookDetails)=>{
+     if(bookDetails.request_status === "Book Sent"){
        var requestStatus = "Donor Interested"
-       db.collection("all_donations").doc(details.doc_id).update({
+       db.collection("all_donations").doc(bookDetails.doc_id).update({
          "request_status" : "Donor Interested"
        })
-       this.sendNotification(Details,requestStatus)
+       this.sendNotification(bookDetails,requestStatus)
      }
      else{
-       var requestStatus = " Sent"
-       db.collection("all_donations").doc(details.doc_id).update({
-         "request_status" : " Sent"
+       var requestStatus = "Book Sent"
+       db.collection("all_donations").doc(bookDetails.doc_id).update({
+         "request_status" : "Book Sent"
        })
-       this.sendNotification(details,requestStatus)
+       this.sendNotification(bookDetails,requestStatus)
      }
    }
 
-   sendNotification=(details,requestStatus)=>{
-     var requestId = details.request_id
-     var donorId = details.donor_id
+   sendNotification=(bookDetails,requestStatus)=>{
+     var requestId = bookDetails.request_id
+     var donorId = bookDetails.donor_id
      db.collection("all_notifications")
      .where("request_id","==", requestId)
      .where("donor_id","==",donorId)
@@ -71,10 +71,10 @@ export default class MyDonationsScreen extends Component {
      .then((snapshot)=>{
        snapshot.forEach((doc) => {
          var message = ""
-         if(requestStatus === " Sent"){
-           message = this.state.donorName + " sent you the item"
+         if(requestStatus === "Book Sent"){
+           message = this.state.donorName + " sent you book"
          }else{
-            message =  this.state.donorName  + " has shown interest in donating the item"
+            message =  this.state.donorName  + " has shown interest in donating the book"
          }
          db.collection("all_notifications").doc(doc.id).update({
            "message": message,
@@ -90,7 +90,7 @@ export default class MyDonationsScreen extends Component {
    renderItem = ( {item, i} ) =>(
      <ListItem
        key={i}
-       title={item.item_name}
+       title={item.book_name}
        subtitle={"Requested By : " + item.requested_by +"\nStatus : " + item.request_status}
        leftElement={<Icon name="book" type="font-awesome" color ='#696969'/>}
        titleStyle={{ color: 'black', fontWeight: 'bold' }}
@@ -99,15 +99,15 @@ export default class MyDonationsScreen extends Component {
             style={[
               styles.button,
               {
-                backgroundColor : item.request_status === " Sent" ? "green" : "#ff5722"
+                backgroundColor : item.request_status === "Book Sent" ? "green" : "#ff5722"
               }
             ]}
             onPress = {()=>{
-              this.send(item)
+              this.sendBook(item)
             }}
            >
              <Text style={{color:'#ffff'}}>{
-               item.request_status === " Sent" ? " Sent" : "Send Item"
+               item.request_status === "Book Sent" ? "Book Sent" : "Send Book"
              }</Text>
            </TouchableOpacity>
          }

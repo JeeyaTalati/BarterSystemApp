@@ -4,24 +4,24 @@ import db from '../config';
 import {ListItem} from 'react-native-elements';
 import firebase, { database } from 'firebase';
 import MyHeader from '../Components/MyHeader';
-export default class DonateScreen extends Component{
+export default class BookDonateScreen extends Component{
 constructor(){
     super();
     this.state={
-        requestedList:[],
+        requestedBooksList:[],
         
     }
     this.requestRef=null;
 }
-getRequestedList=()=>{
-    this.requestRef=database.collection("requested")
+getRequestedBooksList=()=>{
+    this.requestRef=db.collection("requested_books")
     .onSnapshot((snapshot)=>{
-        var requestedList=snapshot.docs.map(document=>document.data());
-        this.setState({requestedList:requestedList});
+        var requestedBooksList=snapshot.docs.map(document=>document.data());
+        this.setState({requestedBooksList:requestedBooksList});
     })
 }
 componentDidMount(){
-    this.getRequestedList()
+    this.getRequestedBooksList()
 }
 componentWillUnmount(){
     this.requestRef=null;
@@ -31,7 +31,7 @@ keyExtractor=(item,index)=>{
 }
 renderItem=({item,i})=>{
 return(
-    <ListItem key={i} title={item.name} subTitle={item.reason}titleStyle={{color:"black",fontWeight:'bold'}} rightElement={<TouchableOpacity style={styles.button} onPress={()=>{this.props.navigation.navigate("ReceiverDetail",{"details": item})}}><Text style={{color:"white"}}>VIEW</Text></TouchableOpacity>} bottomDivider>
+    <ListItem key={i} title={item.bookName} leftElement={<Image style={{height:50,width:50}} source={{uri:item.imageLink}}></Image>} subTitle={item.reason}titleStyle={{color:"black",fontWeight:'bold'}} rightElement={<TouchableOpacity style={styles.button} onPress={()=>{this.props.navigation.navigate("ReceiverDetail",{"details": item})}}><Text style={{color:"white"}}>VIEW</Text></TouchableOpacity>} bottomDivider>
        
     </ListItem>
 )
@@ -39,22 +39,22 @@ return(
 render(){
     return(
         <View style={{flex:1}}>
-          <MyHeader title="DONATE" navigation={this.props.navigation}>
+          <MyHeader title="DONATE BOOKS" navigation={this.props.navigation}>
            
           </MyHeader>
           <View style={{flex:1}}>
              {
-                 this.state.requestedList.length===0?(
+                 this.state.requestedBooksList.length===0?(
                      <View style={styles.subContainer}>
                          <Text style={{fontSize:20}}>
-                          LIST OF ALL REQUESTED THINGS
+                          LIST OF ALL REQUESTED BOOKS
                          </Text>
                          
                      </View>
 
                  ):
                  (
-                     <FlatList keyExtractor={this.keyExtractor} data={this.state.requestedList} renderItem={this.renderItem}>
+                     <FlatList keyExtractor={this.keyExtractor} data={this.state.requestedBooksList} renderItem={this.renderItem}>
 
                      </FlatList>
                  )

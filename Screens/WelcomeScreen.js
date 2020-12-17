@@ -21,7 +21,7 @@ export default class WelcomeScreen extends Component{
     userLogin = ( emailId,password)=>{
         firebase.auth().signInWithEmailAndPassword(emailId,password).then(()=>{
             
-                this.props.navigation.navigate("Donate");
+                this.props.navigation.navigate("DonateBooks");
             
         })
         .catch((error)=>{
@@ -44,11 +44,13 @@ export default class WelcomeScreen extends Component{
         
         firebase.auth().createUserWithEmailAndPassword(emailId,password).then(()=>{
             db.collection("users").add({
+               
                 first_name:this.state.firstName,
                 last_name:this.state.lastName,
                 contact:this.state.contact,
                 email_id:this.state.emailId,
                 address:this.state.address,
+                isBookRequestActive:false,
             })
             return(
                 Alert.alert("Succesfully SignedUp.", "", [{text:"OK",onPress:()=>{this.setState({isModalVisible:false})}}])

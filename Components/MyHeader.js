@@ -2,6 +2,7 @@ import React,{Component} from 'react';
 import {Header, Badge,Icon} from 'react-native-elements';
 import {View,Text,Alert,StyleSheet} from 'react-native';
 import db from '../config'
+
 export default class MyHeader extends Component{
 constructor(){
     super();
@@ -32,7 +33,7 @@ return(
 }
 render(){
     return(
-        <Header leftComponent={<Icon name="bars" type="font-awesome" color="#696969" onPress={()=>{this.props.navigation.toggleDrawer()}} ></Icon>} centerComponent={{text:this.props.title,style:{color:"#90a5a9",fontWeight:'bold', fontSize:20}}} rightComponent={<this.bellIconWithBadge{...this.props}/>} backgroundColor="#eaf8fe">
+        <Header leftComponent={<Icon name="bars" type="font-awesome" color="#696969" onPress={()=>this.props.navigation.toggleDrawer()} ></Icon>} centerComponent={{text:this.props.title,style:{color:"#90a5a9",fontWeight:'bold', fontSize:20}}} rightComponent={<this.bellIconWithBadge{...this.props}/>} backgroundColor="#eaf8fe">
 
         </Header>
     )
